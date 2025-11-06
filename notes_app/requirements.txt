@@ -1,0 +1,8 @@
+fastapi
+uvicorn[standard]
+python-multipart
+pydantic
+firebase-admin      # For connecting to Firestore
+python-dotenv       # For loading environment variables
+bcrypt              # For securely hashing passwords
+pyjwt               # For creating and verifying JWTs
