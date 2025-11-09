@@ -1,8 +1,9 @@
 // src/components/Login.js
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import './Auth.css';
 
 const API_BASE_URL = 'http://localhost:8000'; 
 
@@ -41,34 +42,45 @@ const Login = () => {
   };
 
   return (
-    <div className="card p-4">
-      <h2 className="mb-4">Log In</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-3">
-          <label htmlFor="email-login" className="form-label">Email</label>
-          <input
-            type="email"
-            className="form-control"
-            id="email-login"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="password-login" className="form-label">Password</label>
-          <input
-            type="password"
-            className="form-control"
-            id="password-login"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        <button type="submit" className="btn btn-success">Login</button>
-      </form>
-      {message && <p className={`mt-3 ${message.includes('Error') ? 'text-danger' : 'text-success'}`}>{message}</p>}
+    <div className="auth-container">
+      <div className="auth-card">
+        <h1 className="auth-title">Notify</h1>
+        <p className="auth-subtitle">Login to access your notes</p>
+        
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label htmlFor="email-login">Email</label>
+            <input
+              type="email"
+              id="email-login"
+              placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          
+          <div className="form-group">
+            <label htmlFor="password-login">Password</label>
+            <input
+              type="password"
+              id="password-login"
+              placeholder="Enter your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+          
+          <button type="submit" className="auth-button">Login</button>
+        </form>
+        
+        {message && <p className={`auth-message ${message.includes('Error') ? 'error' : 'success'}`}>{message}</p>}
+        
+        <p className="auth-footer">
+          Don't have an account? <Link to="/register" className="auth-link">Sign Up</Link>
+        </p>
+      </div>
     </div>
   );
 };

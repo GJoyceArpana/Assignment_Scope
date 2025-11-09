@@ -1,5 +1,5 @@
 # app/crud/notes.py
-from app.database import notes_ref
+from app.database import get_notes_ref
 from app.models import NoteIn, NoteDB
 from datetime import datetime
 from google.cloud.firestore import Query
@@ -21,6 +21,7 @@ def _doc_to_note(doc) -> NoteDB:
 
 async def create_note(user_id: str, note_in: NoteIn) -> NoteDB:
     """Creates a new note for the specified user."""
+    notes_ref = get_notes_ref()
     timestamp = datetime.now()
     note_data = {
         "user_id": user_id,
@@ -36,14 +37,18 @@ async def create_note(user_id: str, note_in: NoteIn) -> NoteDB:
 
 async def get_notes_by_user(user_id: str) -> list[NoteDB]:
     """Retrieves all notes belonging to a specific user."""
-    # Filter notes by user_id
-    notes_docs = notes_ref.where("user_id", "==", user_id).order_by("updated_at", direction=Query.DESCENDING).get()
+    notes_ref = get_notes_ref()
+    # Filter notes by user_id (no order_by to avoid requiring Firestore index)
+    notes_docs = notes_ref.where("user_id", "==", user_id).get()
     
+    # Sort in Python instead
     notes = [_doc_to_note(doc) for doc in notes_docs]
+    notes.sort(key=lambda n: n.updated_at, reverse=True)
     return notes
 
 async def get_note_by_id(note_id: str, user_id: str) -> NoteDB | None:
     """Retrieves a single note by ID, verifying ownership."""
+    notes_ref = get_notes_ref()
     doc = notes_ref.document(note_id).get()
     
     if not doc.exists:
@@ -59,6 +64,7 @@ async def get_note_by_id(note_id: str, user_id: str) -> NoteDB | None:
 
 async def update_note(note_id: str, user_id: str, note_in: NoteIn) -> NoteDB | None:
     """Updates an existing note, verifying ownership."""
+    notes_ref = get_notes_ref()
     note_doc_ref = notes_ref.document(note_id)
     doc = note_doc_ref.get()
     
@@ -79,6 +85,7 @@ async def update_note(note_id: str, user_id: str, note_in: NoteIn) -> NoteDB | N
 
 async def delete_note(note_id: str, user_id: str) -> bool:
     """Deletes a note, verifying ownership."""
+    notes_ref = get_notes_ref()
     note_doc_ref = notes_ref.document(note_id)
     doc = note_doc_ref.get()
     

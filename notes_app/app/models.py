@@ -1,5 +1,5 @@
 # app/models.py
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, ConfigDict
 from datetime import datetime
 
 # --- User Models ---
@@ -24,6 +24,8 @@ class NoteIn(BaseModel):
     
 class NoteDB(NoteIn):
     """Schema for how note data is stored in the database."""
+    model_config = ConfigDict(json_encoders={datetime: lambda v: v.isoformat()})
+    
     id: str
     user_id: str # Links the note to a specific user
     created_at: datetime
