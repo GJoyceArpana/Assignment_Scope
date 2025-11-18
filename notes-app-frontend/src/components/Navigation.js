@@ -13,19 +13,22 @@ const Navigation = () => {
     return (
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
             <div className="container">
-                {/* Removed the Navbar Brand Link text here as well to keep it clean */}
+                {/* Brand Link: Changed text to empty string to hide "Notes App" */}
                 <Link className="navbar-brand" to="/dashboard"></Link> 
                 
                 <div className="collapse navbar-collapse">
                     <ul className="navbar-nav ms-auto">
+                        
+                        {/* Case 1: Authenticated (No links rendered here) */}
                         {isAuthenticated ? (
-                            // ⬅️ AUTHENTICATED LINKS REMOVED TO PREVENT UNSTYLED DUPLICATION 
                             <>
-                            {/* Dashboard and Logout links were here. Keeping this block empty hides them. */}
+                            {/* Dashboard and Logout links intentionally removed from the top navigation to prevent unstyled duplication on the dashboard screen. */}
                             </>
                         ) : (
+                            // Case 2 & 3: Unauthenticated
                             <>
-                                {!isAuthPage && ( // Only render Login/Register links if not on those pages
+                                {/* Only render Login/Register links if NOT on the Login/Register page */}
+                                {!isAuthPage && ( 
                                     <>
                                         <li className="nav-item">
                                             <Link className="nav-link" to="/login">Login</Link>

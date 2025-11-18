@@ -1,23 +1,33 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# dependencies
+# --- DEPENDENCIES & VIRTUAL ENVIRONMENTS ---
+# Node dependencies
 /node_modules
 /.pnp
 .pnp.js
 
-# testing
-/coverage
+# Python dependencies
+/.venv          # ⬅️ ADDED: Python Virtual Environment folder
+__pycache__/    # ⬅️ ADDED: Python compiled bytecode
 
-# production
+# --- TESTING & BUILD ARTIFACTS ---
+/coverage
 /build
 
-# misc
-.DS_Store
+# --- SECRETS AND CONFIGURATION ---
+# Local Environment Variables (Standard)
+.env
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
 
+# ⬅️ ADDED: Specific Secret Files for this project 
+serviceAccountKey.json  # ⬅️ Critical: Firebase/GCP Service Account Key
+*.log                   # General log files
+
+# --- MISCELLANEOUS ---
+.DS_Store
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*

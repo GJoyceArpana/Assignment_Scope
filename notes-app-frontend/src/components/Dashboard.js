@@ -1,5 +1,5 @@
 // src/components/Dashboard.js
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import './Dashboard.css';
@@ -21,10 +21,11 @@ const Dashboard = () => {
   };
 
   // --- R (Read) - Fetch Notes ---
-  const fetchNotes = async () => {
+  const fetchNotes = useCallback(async () => {
     setError(null);
     try {
-      const response = await axios.get(`${API_BASE_URL}/notes`, authConfig);
+      const authConfigLocal = { headers: { Authorization: `Bearer ${token}` } };
+      const response = await axios.get(`${API_BASE_URL}/notes`, authConfigLocal);
       setNotes(response.data);
     } catch (err) {
       if (err.response && err.response.status === 401) {
@@ -35,13 +36,13 @@ const Dashboard = () => {
         setError("Failed to fetch notes.");
       }
     }
-  };
+  }, [token, logout]);
 
   useEffect(() => {
     if (token) {
       fetchNotes();
     }
-  }, [token]);
+  }, [token, fetchNotes]);
 
   // --- C (Create) / U (Update) - Handle Note Submission ---
   const handleNoteSubmit = async (e) => {
