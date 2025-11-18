@@ -129,7 +129,7 @@ const Dashboard = () => {
       {/* Header */}
       <div className="dashboard-header">
         <div>
-          <h1 className="dashboard-title">HOME WORK</h1>
+          <h1 className="dashboard-title">NOTIFY</h1>
           <p className="dashboard-subtitle">Welcome, {userId ? userId.substring(0, 8) : 'User'}</p>
         </div>
         <button onClick={handleLogout} className="logout-button">
